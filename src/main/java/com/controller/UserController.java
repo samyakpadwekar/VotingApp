@@ -17,45 +17,38 @@ import com.service.UserService;
 
 @Controller
 public class UserController {
-	
+
 	@Autowired
 	private UserService userServ;
-	
+
 	@PostMapping("/createuser")
-	public String createUser(@ModelAttribute User user, HttpSession session)
-	{
+	public String createUser(@ModelAttribute User user, HttpSession session) {
 		String email = user.getEmail();
-		
-		if(userServ.getUserByEmail(email) != null)
-		{
+
+		if (userServ.getUserByEmail(email) != null) {
 			session.setAttribute("fail", "Registration Failed, Please try different Email Id");
-			
+
 			return "redirect:/register";
-		}
-		else{
-			 
+		} else {
+
 			userServ.addUser(user);
 			session.setAttribute("msg", "Registration successful");
-			return "redirect:/register";
+			return "redirect:/signin";
 		}
-		
+
 	}
-	
+
 	@GetMapping("/user")
-	public String dashboard(Model m, Principal p)
-	{
-		String email = p.getName(); // 
-		
-		User user  = userServ.getUserByEmail(email);
-		
-		m.addAttribute("user",user);
-		m.addAttribute("title","DASHBOARD");
-		
+	public String dashboard(Model m, Principal p) {
+		String email = p.getName(); //
+
+		User user = userServ.getUserByEmail(email);
+
+		m.addAttribute("user", user);
+		m.addAttribute("title", "DASHBOARD");
+
 		return "user/dashboard";
-		
-		
+
 	}
-	
-		
 
 }
