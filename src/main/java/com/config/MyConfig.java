@@ -9,10 +9,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -28,6 +31,7 @@ public class MyConfig extends WebSecurityConfigurerAdapter{
 		return new UserDetailsServiceImpl();
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Bean 
 	public PasswordEncoder passwordEncoder()
 	{
@@ -51,20 +55,13 @@ public class MyConfig extends WebSecurityConfigurerAdapter{
 	
 	
 	@Override
-	protected void configure(HttpSecurity http)throws Exception
-	{
-		http
-		.authorizeRequests()
-		.antMatchers("/admin/**").hasRole("ADMIN")
-		.antMatchers("/user/**","/candidate/**").hasRole("NORMAL")
-		.antMatchers("/**").permitAll()
-		.and().formLogin().loginPage("/signin")
-		.loginProcessingUrl("/dologin")
-		.successHandler(customSuccessHandler)
-		.and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-		.and()
-		.httpBasic()
-		;
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeHttpRequests(requests -> requests.antMatchers("/admin/**").hasRole("ADMIN")
+				.antMatchers("/user/**", "/candidate/**").hasRole("NORMAL").antMatchers("/**").permitAll())
+				.formLogin(login -> login.loginPage("/signin").loginProcessingUrl("/dologin")
+						.successHandler(customSuccessHandler))
+				.logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout")))
+				.httpBasic(withDefaults());
 	}
 	
 
