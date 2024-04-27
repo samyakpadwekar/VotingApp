@@ -46,8 +46,5 @@ public class UserService {
 	{
 		return this.userRepo.getUserByEmail(email);
 	}
-	
-
-	
 
 }
