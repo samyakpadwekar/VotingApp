@@ -6,7 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +21,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Data
+@Table(name="candidate")
 public class Candidate {
 	
 	@Id
