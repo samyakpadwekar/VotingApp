@@ -10,7 +10,7 @@
 		
 			
 			<h1 class="font-weight-bold">Voting Application</h1>
-			
+			<p>Cast your vote and make your voice heard!</p>
 			<div th:if=${session.msg}>
 			<h3 th:text="${session.msg}" style="color:red"></h3>
    			<th:block th:text="${#session.removeAttribute('msg')}"></th:block>
